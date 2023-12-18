@@ -44,6 +44,24 @@
 
         <!--Function .js Scripts to support HTML web map-->
         <script>
+            /*============= BASIC HIGHLIGHTER FOR FEATURES*/
+            var highlightLayer;
+            function highlightFeature(e) {
+                highlightLayer = e.target;
+
+                if (e.target.feature.geometry.type === 'LineString') {
+                    highlightLayer.setStyle({
+                        color: '#e81829',
+                    });
+                }
+                else {
+                    highlightLayer.setStyle({
+                        fillColor: '#e81829',
+                        fillOpacity: 0.3
+                    });
+                }
+            }
+
             /*============= SET BASE MAP EXTENT*/
             var map = L.map('map', {
                 zoomControl:true, maxZoom:28, minZoom:1
@@ -207,6 +225,16 @@
             /*============= SET PARCEL LAYER */
                 //set parcel popup (active)
             function pop_Parcels_4(feature, layer) {
+
+                layer.on({
+                    mouseout: function (e) {
+                        for (i in e.target._eventParents) {
+                            e.target._eventParents[i].setStyle({ color: 'rgba(35,35,35,1.0)', fillColor: 'rgba(0,0,255,0.0)' });
+                        }
+                    },
+                    click: highlightFeature,
+                });
+
                 var popupContent = '<table>\
                         <tr>\
                             <td colspan="2"><strong>Site Address</strong><br />' + (feature.properties['Situs_Addr'] !== null ? autolinker.link(feature.properties['Situs_Addr'].toLocaleString()) : '') + '</td>\

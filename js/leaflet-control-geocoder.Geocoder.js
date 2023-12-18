@@ -180,6 +180,11 @@ module.exports = {
 		},
 
 		_expand: function () {
+			// added to remove the marker for a new search. --ceb 12/18/23--
+			if (this._geocodeMarker) {
+				this._map.removeLayer(this._geocodeMarker);
+			}
+			//
 			L.DomUtil.addClass(this._container, 'leaflet-control-geocoder-expanded');
 			this._input.select();
 			this.fire('expand');
